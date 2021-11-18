@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\Status;
-use App\Enums\UserType;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegistrationRequest;
-use App\Models\Image;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Enums\Status;
+use App\Models\Image;
+use App\Enums\UserType;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegistrationRequest;
 
-class AuthController extends Controller
+class AuthController extends ApiController
 {
     /**
      * Create a new AuthController instance.
@@ -32,10 +32,10 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $user = User::where($request->only('phone'))->first();
-        if(!$user){
+        if (!$user) {
             return $this->respondWithToken(false); // signal that the phone doesn't exist in db
         }
-        if(!Hash::check($request->input('password'), $user->password) || $user->status !== Status::ACTIVE){
+        if (!Hash::check($request->input('password'), $user->password) || $user->status !== Status::ACTIVE) {
             return $this->unauthorized(); // phone number exists, but the token doesn't match
         }
 
@@ -50,6 +50,8 @@ class AuthController extends Controller
     {
         $data = Arr::except($request->validated(), 'image');
         $data['phone_verified_at'] = now();
+        //return $data;
+        $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
         $user->attachRoles([UserType::CUSTOMER]);
 
@@ -90,7 +92,7 @@ class AuthController extends Controller
         return $this->success([
             'new_user' => !$token,
             'access_token' => $token ?: '',
-            'token_type' => 'bearer',
+            'token_type' => 'Bearer',
             'expires_in' => $this->auth()->factory()->getTTL() * 60
         ]);
     }

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller as BaseController;
 use App\Models\User;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Pagination\AbstractPaginator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\JWTGuard;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\AbstractPaginator;
+use App\Http\Controllers\Controller as BaseController;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class Controller extends BaseController
+class ApiController extends BaseController
 {
     /**
      * @param mixed $data
@@ -27,17 +27,17 @@ class Controller extends BaseController
             'message' => $message
         ];
 
-        if(isset($data->resource) && $data->resource instanceof AbstractPaginator) {
+        if (isset($data->resource) && $data->resource instanceof AbstractPaginator) {
             $data = $data->resource->toArray();
-        } else if(!($data instanceof LengthAwarePaginator)) {
+        } else if (!($data instanceof LengthAwarePaginator)) {
             $data = compact('data');
-        }else{
+        } else {
             $data = $data->toArray();
         }
 
         $response += $data;
 
-        if(app()->environment() === 'local'){
+        if (app()->environment() === 'local') {
             $log = collect(DB::getQueryLog());
             $response['queries'] = [
                 'log' => $log->toArray(),

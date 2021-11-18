@@ -44,12 +44,11 @@ class UserSeeder extends Seeder
         foreach ($users as $email => $user) {
             /** @var User $model */
             $model = User::query()->create([
-                'first_name' => $user['name'],
-                'last_name' => 'User',
+                'name' => $user['name'],
                 'password' => bcrypt('secret'),
                 'email' => $email,
                 'email_verified_at' => now(),
-                'phone' => '+880170000000'. ++$i,
+                'phone' => '+880170000000' . ++$i,
                 'phone_verified_at' => now()
             ]);
             /** @var Role $role */
