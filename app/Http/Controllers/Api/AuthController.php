@@ -7,10 +7,10 @@ use App\Enums\Status;
 use App\Models\Image;
 use App\Enums\UserType;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegistrationRequest;
+use App\Models\Event;
 
 class AuthController extends ApiController
 {
@@ -50,13 +50,16 @@ class AuthController extends ApiController
     {
         $data = Arr::except($request->validated(), 'image');
         $data['phone_verified_at'] = now();
-        //return $data;
         $data['password'] = bcrypt($data['password']);
+
         $user = User::create($data);
         $user->attachRoles([UserType::CUSTOMER]);
 
+        Event::create(['user_id' => $user->id]);
+
         return $this->respondWithToken($this->auth()->login($user));
     }
+
 
     /**
      * Log the user out (Invalidate the token).
@@ -90,7 +93,6 @@ class AuthController extends ApiController
     protected function respondWithToken($token)
     {
         return $this->success([
-            'new_user' => !$token,
             'access_token' => $token ?: '',
             'token_type' => 'Bearer',
             'expires_in' => $this->auth()->factory()->getTTL() * 60
