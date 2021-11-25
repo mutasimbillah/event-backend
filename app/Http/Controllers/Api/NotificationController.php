@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\EventRequest;
-use App\Models\Event;
+use App\Http\Requests\NotificationRequest;
+use App\Models\EventNotification;
 use Illuminate\Http\Request;
 
-class EventController extends ApiController
+class NotificationController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -25,9 +24,11 @@ class EventController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NotificationRequest $request)
     {
         //
+        $notification = EventNotification::create($request->all());
+        return $this->success($notification, "Notification Created");
     }
 
     /**
@@ -48,11 +49,9 @@ class EventController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EventRequest $request, Event $event)
+    public function update(Request $request, $id)
     {
         //
-        $event->update($request->all());
-        return $this->success($request->all(), "Event Updated");
     }
 
     /**

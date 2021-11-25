@@ -15,6 +15,11 @@ class CreateEventNotificationsTable extends Migration
     {
         Schema::create('event_notifications', function (Blueprint $table) {
             $table->id();
+
+            $table->string('title');
+            $table->string('body')->nullable();
+            $table->string('action')->nullable();
+
             $table->timestamps();
         });
     }
