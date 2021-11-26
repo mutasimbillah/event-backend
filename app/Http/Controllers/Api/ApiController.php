@@ -88,7 +88,7 @@ class ApiController extends BaseController
      */
     protected function user()
     {
-        return $this->auth()->user() ?: new User();
+        return $this->auth()->user();
     }
 
     /**

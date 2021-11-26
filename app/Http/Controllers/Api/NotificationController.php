@@ -16,6 +16,7 @@ class NotificationController extends ApiController
     public function index()
     {
         //
+        return $this->success(EventNotification::all(), "All Notifications");
     }
 
     /**
@@ -40,6 +41,12 @@ class NotificationController extends ApiController
     public function show($id)
     {
         //
+        $notification = EventNotification::where('id', $id)->first();
+        if ($notification) {
+            return $this->success($notification, "Single Notification with Details");
+        } else {
+            return $this->failed([], "No Notification Found with the id");
+        }
     }
 
     /**

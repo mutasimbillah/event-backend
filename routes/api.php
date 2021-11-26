@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\NotificationController;
@@ -23,15 +24,15 @@ Route::get('/test', function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::apiResource('/notification', NotificationController::class)->only(['store', 'index', 'show']);
 
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('user', [ApiController::class, 'user']);
     Route::put('/update/{event:user_id}', [EventController::class, 'update']);
-    Route::post('/notification', [NotificationController::class, 'store']);
 });
 
 // Route::group(['middleware' => ['auth:api', 'role:super']], function () {
