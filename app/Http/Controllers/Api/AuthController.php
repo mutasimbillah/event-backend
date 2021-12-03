@@ -32,7 +32,6 @@ class AuthController extends ApiController
     public function login(LoginRequest $request)
     {
         $user = User::where($request->only('phone'))->first();
-
         if (!$user) {
             return $this->failed(
                 [],
@@ -59,7 +58,7 @@ class AuthController extends ApiController
         $user = User::create($data);
         $user->attachRoles([UserType::CUSTOMER]);
 
-        Event::create(['user_id' => $user->id]);
+        Event::create(['phone' => $user->phone]);
 
         return $this->respondWithToken($this->auth()->login($user));
     }

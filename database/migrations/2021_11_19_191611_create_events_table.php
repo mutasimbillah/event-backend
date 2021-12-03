@@ -15,13 +15,16 @@ class CreateEventsTable extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->string('phone')->index();
+
             $table->boolean('bus')->default(true);
             $table->boolean('entry')->default(true);
             $table->boolean('lunch')->default(true);
             $table->boolean('return_bus')->default(true);
 
             $table->timestamps();
+
+            $table->foreign('phone')->references('phone')->on('users');
         });
     }
 

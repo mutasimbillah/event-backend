@@ -23,8 +23,7 @@ Route::get('/test', function () {
 });
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-
-Route::apiResource('/notification', NotificationController::class)->only(['store', 'index', 'show']);
+Route::put('/update', [EventController::class, 'update']);
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -32,7 +31,8 @@ Route::apiResource('/notification', NotificationController::class)->only(['store
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user', [ApiController::class, 'user']);
-    Route::put('/update/{event:user_id}', [EventController::class, 'update']);
+
+    Route::apiResource('/notification', NotificationController::class)->only(['store', 'index', 'show']);
 });
 
 // Route::group(['middleware' => ['auth:api', 'role:super']], function () {

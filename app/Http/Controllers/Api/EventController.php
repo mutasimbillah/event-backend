@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 
 class EventController extends ApiController
@@ -48,11 +49,15 @@ class EventController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EventRequest $request, Event $event)
+    public function update(EventRequest $request)
     {
         //
-        $event->update($request->all());
-        return $this->success($request->all(), "Event Updated");
+        $phone = $request['phone'];
+        $data = Arr::except($request->validated(), 'phone');
+        $event = Event::where('phone', $phone)->first();
+        //return $event;
+        $event->update($data);
+        return $this->success($event, "Event Updated");
     }
 
     /**
