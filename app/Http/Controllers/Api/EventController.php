@@ -55,6 +55,9 @@ class EventController extends ApiController
         $phone = $request['phone'];
         $data = Arr::except($request->validated(), 'phone');
         $event = Event::where('phone', $phone)->first();
+        if (!$event) {
+            return $this->failed(null, "No user found with the  phone number");
+        }
         //return $event;
         $event->update($data);
         return $this->success($event, "Event Updated");
