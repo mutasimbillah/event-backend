@@ -24,7 +24,7 @@ class EventRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone' => 'string',
+            'phone' => 'string|required',
             'bus' => 'boolean',
             'entry'    => 'boolean',
             'lunch'    => 'boolean',
