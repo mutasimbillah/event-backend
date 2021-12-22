@@ -34,7 +34,7 @@ class AuthController extends ApiController
         $user = User::where($request->only('phone'))->first();
         if (!$user) {
             return $this->failed(
-                [],
+                null,
                 "No user Found with the mobile number"
             ); // signal that the phone doesn't exist in db
         }

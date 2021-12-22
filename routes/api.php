@@ -24,11 +24,6 @@ Route::get('/test', function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user', [ApiController::class, 'user']);
     Route::apiResource('/notification', NotificationController::class)->only(['index', 'show']);

@@ -45,7 +45,7 @@ class NotificationController extends ApiController
         if ($notification) {
             return $this->success($notification, "Single Notification with Details");
         } else {
-            return $this->failed([], "No Notification Found with the id");
+            return $this->failed(null, "No Notification Found with the id");
         }
     }
 
